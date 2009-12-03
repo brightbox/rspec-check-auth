@@ -28,6 +28,8 @@ Here's an example block that expects HTML to be redirected to login_url and XML/
 
 ## Usage
 
+	require "rspec_check_auth"
+
 CheckAuth knows about different HTTP methods, and can figure out the usual crowd (POST create, DELETE destroy, etc.) You can override the method by passing a `:method` argument.
 
 	check_auth_for do |c|
