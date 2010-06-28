@@ -36,19 +36,41 @@ class CheckAuth
   # Any params given (other than :except) are passed to each action as params,
   # and actions that require an id (edit, show, update) get passed "some_id"
   # 
-  # Accepts :except => [:action, :names] for actions to be skipped in testing
+  # Accepts:
+  #   :only => [:action, :names]
+  #   :except => [:action, :names]
+  # 
+  # Either param can be a single action, or an array of actions. :only takes precedence over :except.
   # 
   def resource_actions params={}
-    skip = params.delete(:except).arrayize || {}
+    except = params.delete(:except).arrayize.compact
+    only = params.delete(:only).arrayize.compact
+
     params[:format] = params.has_key?(:format) ? params[:format].arrayize : [:html,:xml]
-    # Add each action, unless they should be skipped
-    add :index, params  unless skip.include?(:index)
-    add :new, params    unless skip.include?(:new)
-    add :create, params unless skip.include?(:create)
-    add :edit, {:id => "some_id"}.merge(params)   unless skip.include?(:edit)
-    add :show, {:id => "some_id"}.merge(params)   unless skip.include?(:show)
-    add :update, {:id => "some_id"}.merge(params) unless skip.include?(:update)
-    add :destroy, {:id => "some_id"}.merge(params) unless skip.include?(:destroy)
+
+    # Logic to see if we should add an action
+    # It should either be in :only, or :except isn't empty and it's not in :except
+    should_add = lambda do |action|
+      # Only isn't empty and our action is contained within
+      if !only.empty?
+        break only.include?(action)
+      end
+      # Except isn't empty and our action isn't contained therein
+      if !except.empty?
+        break !except.include?(action)
+      end
+      # Just add it
+      true
+    end
+
+    # Add each action, if we should
+    add :index, params                             if should_add[:index]
+    add :new, params                               if should_add[:new]
+    add :create, params                            if should_add[:create]
+    add :edit, {:id => "some_id"}.merge(params)    if should_add[:edit]
+    add :show, {:id => "some_id"}.merge(params)    if should_add[:show]
+    add :update, {:id => "some_id"}.merge(params)  if should_add[:update]
+    add :destroy, {:id => "some_id"}.merge(params) if should_add[:destroy]
   end
 
   def output

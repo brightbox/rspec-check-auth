@@ -89,6 +89,18 @@ describe "RspecCheckAuth" do
     end
   end
 
+  it "should only expect resources it's been told to" do
+    expect_request_for :index, :html
+    expect_request_for :index, :xml
+
+    expect_output_for(:html, [:index_html])
+    expect_output_for(:xml, [:index_xml])
+
+    CheckAuth.for do |c|
+      c.resource_actions :only => :index
+    end
+  end
+
   it "should add standard resource routes with extra params" do
     expect_requests_for_resource_actions :some => :fields
 
