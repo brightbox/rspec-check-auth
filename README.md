@@ -55,7 +55,11 @@ By default it tests via HTMl and XML, but adding more or less formats is no issu
 		c.parent_info :format => [:html, :json]
 	end
 
-Only want some of the usual crowd? No problem, just pass the `:except` param and `resource_actions` will shun those specified.
+Only want some of the usual crowd? No problem, just pass the `:only` param and `resource_actions` will only include those specified.
+
+	check_auth_for {|c| c.resource_actions :only => [:new, :create, :edit, :update] }
+
+And if you don't want some, but want everything else? Pass `:except` and those specified will be left out.
 
 	check_auth_for {|c| c.resource_actions :except => [:new, :create, :edit, :update] }
 
