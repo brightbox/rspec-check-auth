@@ -5,18 +5,26 @@ class CheckAuth
   class Request
     attr_reader :action, :method, :params, :format
 
-    def initialize action, format, params
+    def initialize action, format, opts
       @action = action
       @format = format
-      @method = params[:method] || default_method
-      @params = params.except(:method)
+      @method = opts[:method] || default_method
+      self.params = opts.except(:method)
     end
 
-    # Adds the format into the params
-    # unless it's HTML
-    def params
-      return @params.merge(:format => @format.to_s) unless @format == :html
-      @params
+    # Sets up the params hash
+    # 
+    # Adds :format => self.format if self.format != :html
+    # Merges any passed params into default params for this action
+    # 
+    def params= param_hash
+      @params = default_params.merge(param_hash)
+
+      if @format == :html
+        @params.delete(:format)
+      else
+        @params.merge!(:format => format.to_s)
+      end
     end
 
     # Works out the default method
@@ -33,5 +41,16 @@ class CheckAuth
         :get
       end
     end
+
+    # Adds an id for actions that require it
+    def default_params
+      case @action.to_s
+      when /(show|edit|update|destroy)/
+        {:id => "some_id"}
+      else
+        {}
+      end
+    end
+
   end
 end
