@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{rspec-check-auth}
-  s.version = "0.5.1"
+  s.version = "0.5.2"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Caius Durling"]
-  s.date = %q{2010-06-28}
+  s.date = %q{2010-07-02}
   s.description = %q{Quickly check your rails controller actions require authentication}
   s.email = %q{hello@brightbox.co.uk}
   s.extra_rdoc_files = [
@@ -30,7 +30,8 @@ Gem::Specification.new do |s|
      "lib/rspec_check_auth/extend_hash.rb",
      "lib/rspec_check_auth/extend_object.rb",
      "rspec-check-auth.gemspec",
-     "spec/rspec_check_auth_spec.rb",
+     "spec/lib/request_spec.rb",
+     "spec/lib/rspec_check_auth_spec.rb",
      "spec/spec.opts",
      "spec/spec_helper.rb"
   ]
@@ -40,7 +41,8 @@ Gem::Specification.new do |s|
   s.rubygems_version = %q{1.3.7}
   s.summary = %q{Quickly check your rails controller actions require authentication}
   s.test_files = [
-    "spec/rspec_check_auth_spec.rb",
+    "spec/lib/request_spec.rb",
+     "spec/lib/rspec_check_auth_spec.rb",
      "spec/spec_helper.rb"
   ]
 

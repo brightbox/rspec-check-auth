@@ -1,2 +1,3 @@
+v0.5.2 - Default params for RESTful actions that require 'em
 v0.5.1 - Adding :only as an argument to CheckAuth#resource_actions
 v0.5 - Public Release
